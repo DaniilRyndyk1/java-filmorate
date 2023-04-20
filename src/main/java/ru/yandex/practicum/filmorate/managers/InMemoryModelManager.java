@@ -20,11 +20,6 @@ public class InMemoryModelManager<T extends Model> implements ModelManager<T>{
     }
     @Override
     public Optional<T> find(int id){
-        /*Optional<T> result = Optional.empty();
-        if (objects.containsKey(id)){
-            return Optional.of(objects.get(id)) ;
-        }
-        throw new ()*/
         return Optional.ofNullable(objects.get(id));
     }
     @Override
