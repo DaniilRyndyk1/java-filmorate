@@ -10,7 +10,8 @@ public class User extends Model {
     private String email;
     private String login;
     private LocalDate birthday;
-    public User(String name, String email, String login, LocalDate date){
+
+    public User(String name, String email, String login, LocalDate date) {
         this.setName(name);
         this.setEmail(email);
         this.setLogin(login);
