@@ -10,11 +10,14 @@ import ru.yandex.practicum.filmorate.managers.ModelManager;
 import ru.yandex.practicum.filmorate.models.Model;
 
 import java.util.List;
+
 @Slf4j
-public class Controller <T extends Model> {
+public class Controller<T extends Model> {
+
     protected ModelManager<T> manager;
     @GetMapping
     public List<T> getAll() {
+        
         return manager.getAll();
     }
     @DeleteMapping
