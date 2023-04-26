@@ -14,6 +14,7 @@ import java.time.LocalDate;
 @RequestMapping("/api/users")
 public class UserController extends Controller<User> {
     private static final LocalDate CURRENT_DATE = LocalDate.now();
+
     public UserController() {
         manager = Managers.userManager;
     }
