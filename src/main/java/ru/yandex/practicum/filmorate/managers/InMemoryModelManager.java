@@ -11,6 +11,7 @@ import java.util.Optional;
 public class InMemoryModelManager<T extends Model> implements ModelManager<T> {
     private final HashMap<Integer, T> objects = new HashMap<>();
     private Integer id = 1;
+
     @Override
     public T add(T object) {
         object.setId(id);
@@ -48,12 +49,13 @@ public class InMemoryModelManager<T extends Model> implements ModelManager<T> {
         }
         return result;
     }
+
     @Override
     public T change(T model) {
         int id = model.getId();
         remove(id);
         objects.put(id, model);
-        log.info("Успешно был обновлен объект типа "+ model.getClass().getSimpleName() + " с id = " + id);
+        log.info("Успешно был обновлен объект типа " + model.getClass().getSimpleName() + " с id = " + id);
         return model;
     }
 }
