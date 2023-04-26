@@ -44,7 +44,7 @@ public class FilmControllerTest {
     }
 
     @Test
-    public void ShouldCreateFilm() throws IOException, URISyntaxException, InterruptedException {
+    public void shouldCreateFilm() throws IOException, URISyntaxException, InterruptedException {
         var film = new Film("Konosuba","test@yandex.ru",LocalDate.parse("2000-05-17"),100);
         var json = gson.toJson(film);
         sendRequest(json, "POST");
@@ -54,7 +54,7 @@ public class FilmControllerTest {
     }
 
     @Test
-    public static void ShouldNotCreateFilmWithoutName() throws IOException, URISyntaxException, InterruptedException {
+    public void shouldNotCreateFilmWithoutName() throws IOException, URISyntaxException, InterruptedException {
         var film = new Film("","test@yandex.ru",LocalDate.parse("2000-05-17"),100);
         var json = gson.toJson(film);
         sendRequest(json, "POST");
@@ -64,7 +64,7 @@ public class FilmControllerTest {
     }
 
     @Test
-    public void ShouldNotCreateFilmWithLongDescription() throws IOException, URISyntaxException, InterruptedException {
+    public void shouldNotCreateFilmWithLongDescription() throws IOException, URISyntaxException, InterruptedException {
         var film = new Film("Konosuba","test@yandex.ru3333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222",LocalDate.parse("2000-05-17"),100);
         var json = gson.toJson(film);
         sendRequest(json, "POST");
@@ -74,7 +74,7 @@ public class FilmControllerTest {
     }
 
     @Test
-    public void ShouldNotCreateFilmWithWrongDate() throws IOException, URISyntaxException, InterruptedException {
+    public void shouldNotCreateFilmWithWrongDate() throws IOException, URISyntaxException, InterruptedException {
         var film = new Film("Konosuba","test@yandex.ru",LocalDate.parse("1001-05-17"),100);
         var json = gson.toJson(film);
         sendRequest(json, "POST");
@@ -84,7 +84,7 @@ public class FilmControllerTest {
     }
 
     @Test
-    public void ShouldNotCreateFilmWithWrongDuration() throws IOException, URISyntaxException, InterruptedException {
+    public void shouldNotCreateFilmWithWrongDuration() throws IOException, URISyntaxException, InterruptedException {
         var film = new Film("Konosuba","test@yandex.ru",LocalDate.parse("2000-05-17"),0);
         var json = gson.toJson(film);
         sendRequest(json, "POST");
@@ -94,15 +94,15 @@ public class FilmControllerTest {
     }
 
     @Test
-    public void ShouldNotCreateFilmWithoutData() throws IOException, URISyntaxException, InterruptedException {
+    public void shouldNotCreateFilmWithoutData() throws IOException, URISyntaxException, InterruptedException {
         sendRequest("", "POST");
-        var result =  sendRequest( "", "GET");
+        var result =  sendRequest("", "GET");
         var films = gson.fromJson(result, ArrayList.class);
         assertEquals(0, films.size());
     }
 
     @Test
-    public void ShouldNotCreateFilmWithWrongData() throws IOException, URISyntaxException, InterruptedException {
+    public void shouldNotCreateFilmWithWrongData() throws IOException, URISyntaxException, InterruptedException {
         sendRequest("json", "POST");
         var result =  sendRequest( "", "GET");
         var films = gson.fromJson(result, ArrayList.class);
