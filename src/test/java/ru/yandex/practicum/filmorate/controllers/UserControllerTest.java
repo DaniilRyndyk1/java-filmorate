@@ -39,70 +39,70 @@ public class UserControllerTest {
         sendRequest("","DELETE");
     }
     @Test
-    public void ShouldCreateUser() throws IOException, URISyntaxException, InterruptedException {
+    public void shouldCreateUser() throws IOException, URISyntaxException, InterruptedException {
         var user = new User("Vasya","test@yandex.ru","VasyaTest", LocalDate.parse("2000-05-17"));
         var json = gson.toJson(user);
         sendRequest(json, "POST");
-        var result =  sendRequest( "", "GET");
+        var result =  sendRequest("", "GET");
         var users = gson.fromJson(result, ArrayList.class);
         assertEquals(1, users.size());
     }
     @Test
-    public void ShouldNotCreateUserWithoutEmail() throws IOException, URISyntaxException, InterruptedException {
+    public void shouldNotCreateUserWithoutEmail() throws IOException, URISyntaxException, InterruptedException {
         var user = new User("Vasya","","VasyaTest", LocalDate.parse("2000-05-17"));
         var json = gson.toJson(user);
         sendRequest(json, "POST");
-        var result =  sendRequest( "", "GET");
+        var result =  sendRequest("", "GET");
         var users = gson.fromJson(result, ArrayList.class);
         assertEquals(0, users.size());
     }
     @Test
-    public void ShouldNotCreateUserWithWrongEmail() throws IOException, URISyntaxException, InterruptedException {
+    public void shouldNotCreateUserWithWrongEmail() throws IOException, URISyntaxException, InterruptedException {
         var user = new User("Vasya","Vasya.ru","VasyaTest", LocalDate.parse("2000-05-17"));
         var json = gson.toJson(user);
         sendRequest(json, "POST");
-        var result =  sendRequest( "", "GET");
+        var result =  sendRequest("", "GET");
         var users = gson.fromJson(result, ArrayList.class);
         assertEquals(0, users.size());
     }
     @Test
-    public void ShouldNotCreateUserWithoutLogin() throws IOException, URISyntaxException, InterruptedException {
+    public void shouldNotCreateUserWithoutLogin() throws IOException, URISyntaxException, InterruptedException {
         var user = new User("Vasya","test@yandex.ru","", LocalDate.parse("2000-05-17"));
         var json = gson.toJson(user);
         sendRequest(json, "POST");
-        var result =  sendRequest( "", "GET");
+        var result =  sendRequest("", "GET");
         var users = gson.fromJson(result, ArrayList.class);
         assertEquals(0, users.size());
     }
     @Test
-    public void ShouldNotCreateUserWithSpacesInLogin() throws IOException, URISyntaxException, InterruptedException {
+    public void shouldNotCreateUserWithSpacesInLogin() throws IOException, URISyntaxException, InterruptedException {
         var user = new User("Vasya","test@yandex.ru","Vas ya", LocalDate.parse("2000-05-17"));
         var json = gson.toJson(user);
         sendRequest(json, "POST");
-        var result =  sendRequest( "", "GET");
+        var result =  sendRequest("", "GET");
         var users = gson.fromJson(result, ArrayList.class);
         assertEquals(0, users.size());
     }
     @Test
-    public void ShouldNotCreateUserWithBirthdayInFuture() throws IOException, URISyntaxException, InterruptedException {
+    public void shouldNotCreateUserWithBirthdayInFuture() throws IOException, URISyntaxException, InterruptedException {
         var user = new User("Vasya","test@yandex.ru","VasyaTest", LocalDate.parse("3000-05-17"));
         var json = gson.toJson(user);
         sendRequest(json, "POST");
-        var result =  sendRequest( "", "GET");
+        var result =  sendRequest("", "GET");
         var users = gson.fromJson(result, ArrayList.class);
         assertEquals(0, users.size());
     }
     @Test
-    public void ShouldNotCreateUserWithoutData() throws IOException, URISyntaxException, InterruptedException {
+    public void shouldNotCreateUserWithoutData() throws IOException, URISyntaxException, InterruptedException {
         sendRequest("", "POST");
-        var result =  sendRequest( "", "GET");
+        var result =  sendRequest("", "GET");
         var users = gson.fromJson(result, ArrayList.class);
         assertEquals(0, users.size());
     }
     @Test
-    public void ShouldNotCreateUserWithWrongData() throws IOException, URISyntaxException, InterruptedException {
+    public void shouldNotCreateUserWithWrongData() throws IOException, URISyntaxException, InterruptedException {
         sendRequest("json", "POST");
-        var result =  sendRequest( "", "GET");
+        var result =  sendRequest("", "GET");
         var users = gson.fromJson(result, ArrayList.class);
         assertEquals(0, users.size());
     }
