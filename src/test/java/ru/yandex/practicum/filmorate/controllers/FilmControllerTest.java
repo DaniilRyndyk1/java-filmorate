@@ -27,6 +27,7 @@ public class FilmControllerTest {
     private static Gson gson;
     private static HttpClient client;
     private static ConfigurableApplicationContext applicationContext;
+
     @BeforeAll
     public static void setup() {
         GsonBuilder builder = new GsonBuilder();
@@ -36,10 +37,12 @@ public class FilmControllerTest {
         applicationContext = SpringApplication.run(FilmorateApplication.class);
         client = HttpClient.newHttpClient();
     }
+
     @BeforeEach
     public void clear() throws IOException, URISyntaxException, InterruptedException {
         sendRequest("","DELETE");
     }
+
     @Test
     public void ShouldCreateFilm() throws IOException, URISyntaxException, InterruptedException {
         var film = new Film("Konosuba","test@yandex.ru",LocalDate.parse("2000-05-17"),100 );
@@ -49,33 +52,37 @@ public class FilmControllerTest {
         var films = gson.fromJson(result, ArrayList.class);
         assertEquals(1, films.size());
     }
+
     @Test
     public void ShouldNotCreateFilmWithoutName() throws IOException, URISyntaxException, InterruptedException {
         var film = new Film("","test@yandex.ru",LocalDate.parse("2000-05-17"),100 );
         var json = gson.toJson(film);
         sendRequest(json, "POST");
-        var result =  sendRequest( "", "GET");
+        var result =  sendRequest("", "GET");
         var films = gson.fromJson(result, ArrayList.class);
         assertEquals(0, films.size());
     }
+
     @Test
     public void ShouldNotCreateFilmWithLongDescription() throws IOException, URISyntaxException, InterruptedException {
         var film = new Film("Konosuba","test@yandex.ru3333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222",LocalDate.parse("2000-05-17"),100 );
         var json = gson.toJson(film);
         sendRequest(json, "POST");
-        var result =  sendRequest( "", "GET");
+        var result =  sendRequest("", "GET");
         var films = gson.fromJson(result, ArrayList.class);
         assertEquals(0, films.size());
     }
+
     @Test
     public void ShouldNotCreateFilmWithWrongDate() throws IOException, URISyntaxException, InterruptedException {
         var film = new Film("Konosuba","test@yandex.ru",LocalDate.parse("1001-05-17"),100 );
         var json = gson.toJson(film);
         sendRequest(json, "POST");
-        var result =  sendRequest( "", "GET");
+        var result =  sendRequest("", "GET");
         var films = gson.fromJson(result, ArrayList.class);
         assertEquals(0, films.size());
     }
+
     @Test
     public void ShouldNotCreateFilmWithWrongDuration() throws IOException, URISyntaxException, InterruptedException {
         var film = new Film("Konosuba","test@yandex.ru",LocalDate.parse("2000-05-17"),0 );
@@ -85,6 +92,7 @@ public class FilmControllerTest {
         var films = gson.fromJson(result, ArrayList.class);
         assertEquals(0, films.size());
     }
+
     @Test
     public void ShouldNotCreateFilmWithoutData() throws IOException, URISyntaxException, InterruptedException {
         sendRequest("", "POST");
@@ -92,6 +100,7 @@ public class FilmControllerTest {
         var films = gson.fromJson(result, ArrayList.class);
         assertEquals(0, films.size());
     }
+
     @Test
     public void ShouldNotCreateFilmWithWrongData() throws IOException, URISyntaxException, InterruptedException {
         sendRequest("json", "POST");
@@ -99,6 +108,7 @@ public class FilmControllerTest {
         var films = gson.fromJson(result, ArrayList.class);
         assertEquals(0, films.size());
     }
+
     private String sendRequest(String body, String method) throws IOException, InterruptedException, URISyntaxException {
         var requestBuilder = HttpRequest.newBuilder();
         requestBuilder.setHeader("Content-Type", "application/json; charset=utf8");
@@ -129,6 +139,7 @@ public class FilmControllerTest {
         var result = client.send(request, handler);
         return result.body();
     }
+
     @AfterAll
     public static void exit() {
         applicationContext.close();
