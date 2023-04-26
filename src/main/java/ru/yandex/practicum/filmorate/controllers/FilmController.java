@@ -12,23 +12,26 @@ import java.time.LocalDate;
 @RestController
 @Slf4j
 @RequestMapping("/api/films")
-public class FilmController extends Controller<Film>{
+public class FilmController extends Controller<Film> {
+
     private final LocalDate MOVIE_BORNING_DATE = LocalDate.parse("1895-12-28");
+
     public FilmController(){
         manager = Managers.filmManager;
     }
+
     @Override
     public void validate(Film object) throws ValidationException {
-        if(object.getName().equals("")){
+        if (object.getName().equals("")) {
             throw new ValidationException("Название не может быть пустым", object);
         }
-        else if(object.getDescription().length()>200){
+        else if (object.getDescription().length()>200) {
             throw new ValidationException("Описание не должно быть длиннее 200 символов", object);
         }
-        else if(object.getReleaseDate().isBefore(MOVIE_BORNING_DATE)){
+        else if (object.getReleaseDate().isBefore(MOVIE_BORNING_DATE)) {
             throw new ValidationException("Дата релиза не должна быть раньше 28 декабря 1895", object);
         }
-        else if(object.getDuration()<=0){
+        else if (object.getDuration()<=0) {
             throw new ValidationException("Продолжительность должна быть больше 0", object);
         }
     }
