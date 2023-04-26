@@ -2,7 +2,7 @@ package ru.yandex.practicum.filmorate.exceptions;
 
 import ru.yandex.practicum.filmorate.models.Model;
 
-public class ValidationException extends Exception {
+public class ValidationException extends RuntimeException {
 
     private final Model model;
 
