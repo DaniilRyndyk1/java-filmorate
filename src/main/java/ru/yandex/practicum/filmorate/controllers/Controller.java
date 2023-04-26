@@ -17,7 +17,7 @@ public class Controller<T extends Model> {
     protected ModelManager<T> manager;
     @GetMapping
     public List<T> getAll() {
-        
+
         return manager.getAll();
     }
     @DeleteMapping
@@ -34,11 +34,13 @@ public class Controller<T extends Model> {
             return null;
         }
         var foundObject = manager.find(object.getId());
-        if(foundObject.isEmpty()){
+
+        if(foundObject.isEmpty()) {
             return manager.add(object);
         }
         return manager.change(object);
     }
+
     public void validate(T object) throws ValidationException {
         throw new UnsupportedOperationException();
     }
