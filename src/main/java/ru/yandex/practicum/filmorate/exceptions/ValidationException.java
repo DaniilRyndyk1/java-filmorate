@@ -11,7 +11,7 @@ public class ValidationException extends Exception {
     }
 
     public ValidationException(String message, Model model) {
-        super("При создании объекта типа "+model.getClass().getSimpleName() + ":"+ message);
+        super("При создании объекта типа " + model.getClass().getSimpleName() + ":" + message);
         this.model = model;
     }
 }
