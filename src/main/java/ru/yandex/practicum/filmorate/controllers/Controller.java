@@ -15,11 +15,13 @@ import java.util.List;
 public class Controller<T extends Model> {
 
     protected ModelManager<T> manager;
+
     @GetMapping
     public List<T> getAll() {
 
         return manager.getAll();
     }
+
     @DeleteMapping
     public void clear() {
          manager.clear();
@@ -36,6 +38,7 @@ public class Controller<T extends Model> {
         var foundObject = manager.find(object.getId());
 
         if(foundObject.isEmpty()) {
+
             return manager.add(object);
         }
         return manager.change(object);
