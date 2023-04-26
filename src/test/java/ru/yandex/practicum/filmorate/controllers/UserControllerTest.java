@@ -24,6 +24,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 public class UserControllerTest {
     private static Gson gson;
     private static HttpClient client;
+
     @BeforeAll
     public static void setup() throws InterruptedException {
         Thread.sleep(1000);
@@ -34,10 +35,12 @@ public class UserControllerTest {
         SpringApplication.run(FilmorateApplication.class);
         client = HttpClient.newHttpClient();
     }
+
     @BeforeEach
     public void clear() throws IOException, URISyntaxException, InterruptedException {
         sendRequest("","DELETE");
     }
+
     @Test
     public void shouldCreateUser() throws IOException, URISyntaxException, InterruptedException {
         var user = new User("Vasya","test@yandex.ru","VasyaTest", LocalDate.parse("2000-05-17"));
@@ -47,6 +50,7 @@ public class UserControllerTest {
         var users = gson.fromJson(result, ArrayList.class);
         assertEquals(1, users.size());
     }
+
     @Test
     public void shouldNotCreateUserWithoutEmail() throws IOException, URISyntaxException, InterruptedException {
         var user = new User("Vasya","","VasyaTest", LocalDate.parse("2000-05-17"));
@@ -56,6 +60,7 @@ public class UserControllerTest {
         var users = gson.fromJson(result, ArrayList.class);
         assertEquals(0, users.size());
     }
+
     @Test
     public void shouldNotCreateUserWithWrongEmail() throws IOException, URISyntaxException, InterruptedException {
         var user = new User("Vasya","Vasya.ru","VasyaTest", LocalDate.parse("2000-05-17"));
@@ -65,6 +70,7 @@ public class UserControllerTest {
         var users = gson.fromJson(result, ArrayList.class);
         assertEquals(0, users.size());
     }
+
     @Test
     public void shouldNotCreateUserWithoutLogin() throws IOException, URISyntaxException, InterruptedException {
         var user = new User("Vasya","test@yandex.ru","", LocalDate.parse("2000-05-17"));
@@ -74,6 +80,7 @@ public class UserControllerTest {
         var users = gson.fromJson(result, ArrayList.class);
         assertEquals(0, users.size());
     }
+
     @Test
     public void shouldNotCreateUserWithSpacesInLogin() throws IOException, URISyntaxException, InterruptedException {
         var user = new User("Vasya","test@yandex.ru","Vas ya", LocalDate.parse("2000-05-17"));
@@ -83,6 +90,7 @@ public class UserControllerTest {
         var users = gson.fromJson(result, ArrayList.class);
         assertEquals(0, users.size());
     }
+
     @Test
     public void shouldNotCreateUserWithBirthdayInFuture() throws IOException, URISyntaxException, InterruptedException {
         var user = new User("Vasya","test@yandex.ru","VasyaTest", LocalDate.parse("3000-05-17"));
@@ -92,6 +100,7 @@ public class UserControllerTest {
         var users = gson.fromJson(result, ArrayList.class);
         assertEquals(0, users.size());
     }
+
     @Test
     public void shouldNotCreateUserWithoutData() throws IOException, URISyntaxException, InterruptedException {
         sendRequest("", "POST");
@@ -99,6 +108,7 @@ public class UserControllerTest {
         var users = gson.fromJson(result, ArrayList.class);
         assertEquals(0, users.size());
     }
+
     @Test
     public void shouldNotCreateUserWithWrongData() throws IOException, URISyntaxException, InterruptedException {
         sendRequest("json", "POST");
@@ -106,6 +116,7 @@ public class UserControllerTest {
         var users = gson.fromJson(result, ArrayList.class);
         assertEquals(0, users.size());
     }
+
     private String sendRequest(String body, String method) throws IOException, InterruptedException, URISyntaxException {
         var requestBuilder = HttpRequest.newBuilder();
         requestBuilder.setHeader("Content-Type", "application/json; charset=utf8");
