@@ -19,7 +19,7 @@ public class UserAdapter extends Adapter<User> {
             writer.beginObject();
             super.write(writer, user);
             writeProperty(writer, "email", user.getEmail());
-            writeProperty(writer, "login", user.getLogin() );
+            writeProperty(writer, "login", user.getLogin());
             writeProperty(writer, "birthday", user.getBirthday() + "");
             writer.endObject();
         } catch (IOException exception) {
