@@ -37,8 +37,7 @@ public class Controller<T extends Model> {
         }
         var foundObject = manager.find(object.getId());
 
-        if(foundObject.isEmpty()) {
-
+        if (foundObject.isEmpty()) {
             return manager.add(object);
         }
         return manager.change(object);
