@@ -88,7 +88,7 @@ public class FilmControllerTest {
         var film = new Film("Konosuba","test@yandex.ru",LocalDate.parse("2000-05-17"),0);
         var json = gson.toJson(film);
         sendRequest(json, "POST");
-        var result =  sendRequest( "", "GET");
+        var result =  sendRequest("", "GET");
         var films = gson.fromJson(result, ArrayList.class);
         assertEquals(0, films.size());
     }
@@ -104,7 +104,7 @@ public class FilmControllerTest {
     @Test
     public void shouldNotCreateFilmWithWrongData() throws IOException, URISyntaxException, InterruptedException {
         sendRequest("json", "POST");
-        var result =  sendRequest( "", "GET");
+        var result =  sendRequest("", "GET");
         var films = gson.fromJson(result, ArrayList.class);
         assertEquals(0, films.size());
     }
