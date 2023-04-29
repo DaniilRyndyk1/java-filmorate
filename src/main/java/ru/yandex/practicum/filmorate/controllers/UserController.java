@@ -11,7 +11,7 @@ import java.time.LocalDate;
 
 @RestController
 @Slf4j
-@RequestMapping("/api/users")
+@RequestMapping("/users")
 public class UserController extends Controller<User> {
     private static final LocalDate CURRENT_DATE = LocalDate.now();
 

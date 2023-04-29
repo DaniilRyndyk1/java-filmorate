@@ -11,7 +11,7 @@ import java.time.LocalDate;
 
 @RestController
 @Slf4j
-@RequestMapping("/api/films")
+@RequestMapping("/films")
 public class FilmController extends Controller<Film> {
 
     private static final LocalDate MOVIE_BORNING_DATE = LocalDate.parse("1895-12-28");
