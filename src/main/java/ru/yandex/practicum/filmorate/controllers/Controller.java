@@ -44,6 +44,5 @@ public class Controller<T extends Model> {
     }
 
     public void validate(T object) throws ValidationException {
-        throw new UnsupportedOperationException();
     }
 }
