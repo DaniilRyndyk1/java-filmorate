@@ -112,7 +112,7 @@ public class FilmControllerTest {
     private String sendRequest(String body, String method) throws IOException, InterruptedException, URISyntaxException {
         var requestBuilder = HttpRequest.newBuilder();
         requestBuilder.setHeader("Content-Type", "application/json; charset=utf8");
-        var uri = new URI("http://localhost:8080/api/films");
+        var uri = new URI("http://localhost:8080/films");
 
         HttpRequest request;
         switch (method) {

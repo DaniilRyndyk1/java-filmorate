@@ -120,7 +120,7 @@ public class UserControllerTest {
     private String sendRequest(String body, String method) throws IOException, InterruptedException, URISyntaxException {
         var requestBuilder = HttpRequest.newBuilder();
         requestBuilder.setHeader("Content-Type", "application/json; charset=utf8");
-        var uri = new URI("http://localhost:8080/api/users");
+        var uri = new URI("http://localhost:8080/users");
 
         HttpRequest request;
         switch (method) {
