@@ -33,7 +33,7 @@ public class Controller<T extends Model> {
             validate(object);
         } catch (ValidationException e) {
             log.error("При валидации возникло исключение:", e);
-            return null;
+            throw e;
         }
         var foundObject = manager.find(object.getId());
 
