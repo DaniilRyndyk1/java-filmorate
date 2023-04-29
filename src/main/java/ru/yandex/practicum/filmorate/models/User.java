@@ -16,5 +16,8 @@ public class User extends Model {
         this.setEmail(email);
         this.setLogin(login);
         this.setBirthday(date);
+        if (name == null) {
+            this.setName(login);
+        }
     }
 }
