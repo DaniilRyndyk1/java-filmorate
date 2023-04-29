@@ -1,10 +1,7 @@
 package ru.yandex.practicum.filmorate.controllers;
 
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.*;
 import ru.yandex.practicum.filmorate.exceptions.ValidationException;
 import ru.yandex.practicum.filmorate.managers.ModelManager;
 import ru.yandex.practicum.filmorate.models.Model;
@@ -29,16 +26,24 @@ public class Controller<T extends Model> {
 
     @PostMapping
     public T create(@RequestBody T object) {
-        try {
-            validate(object);
-        } catch (ValidationException e) {
-            log.error("При валидации возникло исключение:", e);
-            throw e;
-        }
+        validate(object);
         var foundObject = manager.find(object.getId());
+        if (!foundObject.isEmpty()) {
+            var exception = new ValidationException("Такой объект уже есть", object);
+            log.error("Такой объект уже есть", exception);
+            throw exception;
+        }
+        return manager.add(object);
+    }
 
+    @PutMapping
+    public T change(@RequestBody T object) {
+        validate(object);
+        var foundObject = manager.find(object.getId());
         if (foundObject.isEmpty()) {
-            return manager.add(object);
+            var exception = new ValidationException("Такой объект не существует", object);
+            log.error("Такой объект не существует", exception);
+            throw exception;
         }
         return manager.change(object);
     }
