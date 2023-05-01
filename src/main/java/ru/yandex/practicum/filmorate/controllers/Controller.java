@@ -9,13 +9,12 @@ import ru.yandex.practicum.filmorate.models.Model;
 import java.util.List;
 
 @Slf4j
-public class Controller<T extends Model> {
+public abstract class Controller<T extends Model> {
 
     protected ModelManager<T> manager;
 
     @GetMapping
     public List<T> getAll() {
-
         return manager.getAll();
     }
 
@@ -27,12 +26,6 @@ public class Controller<T extends Model> {
     @PostMapping
     public T create(@RequestBody T object) {
         validate(object);
-        var foundObject = manager.find(object.getId());
-        if (!foundObject.isEmpty()) {
-            var exception = new ValidationException("Такой объект уже есть", object);
-            log.error("Такой объект уже есть", exception);
-            throw exception;
-        }
         return manager.add(object);
     }
 
@@ -48,6 +41,5 @@ public class Controller<T extends Model> {
         return manager.change(object);
     }
 
-    public void validate(T object) throws ValidationException {
-    }
+    public abstract void validate(T object);
 }

@@ -2,7 +2,7 @@ package ru.yandex.practicum.filmorate.managers;
 
 import ru.yandex.practicum.filmorate.models.Model;
 
-import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 public interface ModelManager<T extends Model> {
@@ -14,7 +14,7 @@ public interface ModelManager<T extends Model> {
 
     void clear();
 
-    ArrayList<T> getAll();
+    List<T> getAll();
 
     T change(T model);
 }

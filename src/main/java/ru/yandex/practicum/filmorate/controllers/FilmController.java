@@ -21,11 +21,17 @@ public class FilmController extends Controller<Film> {
     }
 
     @Override
-    public void validate(Film object) throws ValidationException {
-        if (object.getName().equals("")) {
+    public void validate(Film object) {
+        if (object.getName() == null) {
+            throw new ValidationException("Название не задано", object);
+        } else if (object.getName().isBlank()) {
             throw new ValidationException("Название не может быть пустым", object);
+        } else if (object.getDescription() == null) {
+            throw new ValidationException("Описание не задано", object);
         } else if (object.getDescription().length() > 200) {
             throw new ValidationException("Описание не должно быть длиннее 200 символов", object);
+        } else if (object.getReleaseDate() == null) {
+            throw new ValidationException("Дата релиза не задана", object);
         } else if (object.getReleaseDate().isBefore(MOVIE_BORNING_DATE)) {
             throw new ValidationException("Дата релиза не должна быть раньше 28 декабря 1895", object);
         } else if (object.getDuration() <= 0) {
