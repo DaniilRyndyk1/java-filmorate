@@ -10,7 +10,7 @@ public class InMemoryModelManager<T extends Model> implements ModelManager<T> {
     private final Map<Integer, T> objects;
     private Integer id = 1;
 
-    public InMemoryModelManager(){
+    public InMemoryModelManager() {
         objects = new HashMap<>();
     }
 
