@@ -1,16 +1,16 @@
-package ru.yandex.practicum.filmorate.managers;
+package ru.yandex.practicum.filmorate.storages;
 
 import ru.yandex.practicum.filmorate.models.Model;
 
 import java.util.List;
 import java.util.Optional;
 
-public interface ModelManager<T extends Model> {
+public interface ModelStorage<T extends Model> {
     T add(T object);
 
-    Optional<T> find(int id);
+    Optional<T> find(long id);
 
-    boolean remove(int id);
+    boolean remove(long id);
 
     void clear();
 
