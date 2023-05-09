@@ -31,15 +31,15 @@ public class FilmService {
         return filmStorage
                 .getAll()
                 .stream()
-                .collect(Collectors.toMap(x->x,x->x.getLikes().size()))
+                .collect(Collectors.toMap(x -> x, x -> x.getLikes().size()))
                 .entrySet()
                 .stream()
                 .sorted(Map.Entry.comparingByValue(Comparator.reverseOrder()))
                 .limit(count)
                 .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue))
                 .keySet();
-
     }
+
     public Film get(long id) {
         var film = filmStorage.find(id);
         if (film.isEmpty()) {
