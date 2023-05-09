@@ -6,6 +6,7 @@ import org.springframework.web.bind.annotation.*;
 import ru.yandex.practicum.filmorate.exceptions.ValidationException;
 import ru.yandex.practicum.filmorate.services.FilmService;
 import ru.yandex.practicum.filmorate.models.Film;
+import ru.yandex.practicum.filmorate.services.UserService;
 import ru.yandex.practicum.filmorate.storages.InMemoryFilmStorage;
 
 import java.time.LocalDate;
@@ -19,27 +20,23 @@ public class FilmController extends Controller<Film> {
 
     private static final LocalDate MOVIE_BORNING_DATE = LocalDate.parse("1895-12-28");
     private final FilmService service;
-    private final UserController userController;
+    private final UserService userService;
 
     @Autowired
-    public FilmController(FilmService service, InMemoryFilmStorage storage, UserController userController) {
+    public FilmController(FilmService service, InMemoryFilmStorage storage, UserService userService) {
         super(storage);
         this.service = service;
-        this.userController = userController;
+        this.userService = userService;
     }
 
     @PutMapping("/{id}/like/{userId}")
     public void addLike(@PathVariable long id, @PathVariable long userId) {
-        var film = get(id);
-        var user = userController.get(userId);
-        service.addLike(film, user);
+        service.addLike(id, userId);
     }
 
     @DeleteMapping("/{id}/like/{userId}")
     public void removeLike(@PathVariable long id, @PathVariable long userId) {
-        var film = get(id);
-        var user = userController.get(userId);
-        service.removeLike(film, user);
+        service.removeLike(id, userId);
     }
 
     @GetMapping("/popular")

@@ -9,7 +9,6 @@ import ru.yandex.practicum.filmorate.services.UserService;
 import ru.yandex.practicum.filmorate.storages.InMemoryUserStorage;
 
 import java.time.LocalDate;
-import java.util.ArrayList;
 import java.util.List;
 
 @RestController
@@ -27,41 +26,22 @@ public class UserController extends Controller<User> {
 
     @PutMapping("/{id}/friends/{friendId}")
     public void addFriend(@PathVariable long id, @PathVariable int friendId) {
-       var user = get(id);
-       var friend = get(friendId);
-       service.addFriendship(user,friend);
+       service.addFriendship(id, friendId);
     }
 
     @DeleteMapping("/{id}/friends/{friendId}")
     public void removeFriend(@PathVariable long id, @PathVariable int friendId) {
-        var user = get(id);
-        var friend = get(friendId);
-        service.removeFriendship(user,friend);
+        service.removeFriendship(id, friendId);
     }
 
     @GetMapping("/{id}/friends")
     public List<User> getFriends(@PathVariable long id) {
-        var user = get(id);
-        var friends = new ArrayList<User>();
-        var friendsIds = user.getFriends();
-        for (long friendId : friendsIds) {
-            var friend = get(friendId);
-            friends.add(friend);
-        }
-        return friends;
+        return service.getFriends(id);
     }
 
     @GetMapping("/{id}/friends/common/{otherId}")
     public List<User> getSameFriends(@PathVariable long id, @PathVariable long otherId) {
-        var user = get(id);
-        var otherUser = get(otherId);
-        var friends = new ArrayList<User>();
-        var friendsIds = service.getSameFriends(user, otherUser);
-        for (long friendId : friendsIds) {
-            var friend = get(friendId);
-            friends.add(friend);
-        }
-        return friends;
+       return service.getSameFriends(id, otherId);
     }
 
     @Override
