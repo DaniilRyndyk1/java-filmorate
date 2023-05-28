@@ -8,10 +8,7 @@ import org.springframework.stereotype.Component;
 import ru.yandex.practicum.filmorate.models.Film;
 import ru.yandex.practicum.filmorate.models.Genre;
 
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 
 @Component
@@ -84,7 +81,7 @@ public class FilmDao extends ModelDao<Film> {
     public Film getObject(SqlRowSet set) {
         var id = set.getLong("ID");
         var description = set.getString("DESCRIPTION");
-        var releaseDate = set.getDate("REALEASE_DATE").toLocalDate();
+        var releaseDate = Objects.requireNonNull(set.getDate("REALEASE_DATE")).toLocalDate();
         var duration = set.getInt("DURATION");
         var ratingId = set.getLong("Rating_id");
         var name = set.getString("NAME");
@@ -99,52 +96,48 @@ public class FilmDao extends ModelDao<Film> {
 
     @Override
     public String getInsertData(Film object) {
-        StringBuilder builder = new StringBuilder();
-        builder.append("'").
-                append(object.getId()).
-                append("',").
-                append("'").
-                append(object.getDescription()).
-                append("',").
-                append("'").
-                append(object.getReleaseDate()).
-                append("',").
-                append("'").
-                append(object.getDuration()).
-                append("',").
-                append("'").
-                append(object.getMpa().getId()).
-                append("',").
-                append("'").
-                append(object.getName()).
-                append("'");
-        return builder.toString();
+        return "'" +
+                object.getId() +
+                "'," +
+                "'" +
+                object.getDescription() +
+                "'," +
+                "'" +
+                object.getReleaseDate() +
+                "'," +
+                "'" +
+                object.getDuration() +
+                "'," +
+                "'" +
+                object.getMpa().getId() +
+                "'," +
+                "'" +
+                object.getName() +
+                "'";
     }
 
     @Override
     public String getUpdateData(Film object) {
-        StringBuilder builder = new StringBuilder();
-        builder.append("description = ").
-                append("'").
-                append(object.getDescription()).
-                append("',").
-                append("realease_Date = ").
-                append("'").
-                append(object.getReleaseDate()).
-                append("',").
-                append("duration = ").
-                append("'").
-                append(object.getDuration()).
-                append("',").
-                append("rating_Id = ").
-                append("'").
-                append(object.getMpa().getId()).
-                append("',").
-                append("name = ").
-                append("'").
-                append(object.getName()).
-                append("'");
-        return builder.toString();
+        return "description = " +
+                "'" +
+                object.getDescription() +
+                "'," +
+                "realease_Date = " +
+                "'" +
+                object.getReleaseDate() +
+                "'," +
+                "duration = " +
+                "'" +
+                object.getDuration() +
+                "'," +
+                "rating_Id = " +
+                "'" +
+                object.getMpa().getId() +
+                "'," +
+                "name = " +
+                "'" +
+                object.getName() +
+                "'";
     }
 
     @Override

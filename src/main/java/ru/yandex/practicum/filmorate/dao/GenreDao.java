@@ -26,23 +26,19 @@ public class GenreDao extends ModelDao<Genre>{
 
     @Override
     public String getInsertData(Genre object) {
-        StringBuilder builder = new StringBuilder();
-        builder.append("'").
-                append(object.getId()).
-                append("',").
-                append("'").
-                append(object.getName()).
-                append("'");
-        return builder.toString();
+        return "'" +
+                object.getId() +
+                "'," +
+                "'" +
+                object.getName() +
+                "'";
     }
 
     @Override
     public String getUpdateData(Genre object) {
-        StringBuilder builder = new StringBuilder();
-        builder.append("name = ").
-                append("'").
-                append(object.getName()).
-                append("'");
-        return builder.toString();
+        return "name = " +
+                "'" +
+                object.getName() +
+                "'";
     }
 }
