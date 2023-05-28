@@ -36,7 +36,7 @@ public class ModelDao<T extends Model> implements ModelStorage<T> {
     @Override
     public T add(T object) {
         object.setId(id);
-        jdbcTemplate.execute("insert into PUBLIC." + tableName + " values("+ getInsertData(object) + ")");
+        jdbcTemplate.execute("insert into PUBLIC." + tableName + " values(" + getInsertData(object) + ")");
         log.info("Успешно был добавлен объект типа {} с id = {}", object.getClass().getSimpleName(), id);
         id++;
         return object;
