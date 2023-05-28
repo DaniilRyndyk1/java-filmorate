@@ -20,6 +20,7 @@ import java.util.Set;
 public class FilmDao extends ModelDao<Film> {
     private final RatingDao ratingDao;
     private final GenreDao genreDao;
+
     public FilmDao(JdbcTemplate jdbcTemplate, RatingDao ratingDao, GenreDao genreDao) {
         super(jdbcTemplate, "FILM");
         this.ratingDao = ratingDao;
@@ -44,7 +45,7 @@ public class FilmDao extends ModelDao<Film> {
 
     public Set<Genre> getGenres(long id) {
         var result = new HashSet<Genre>();
-        var rows = jdbcTemplate.queryForRowSet("select * from FILMS_GENRES WHERE film_id = " + id );
+        var rows = jdbcTemplate.queryForRowSet("select * from FILMS_GENRES WHERE film_id = " + id);
         while (rows.next()) {
             var genreId = rows.getLong("genre_id");
             var object = genreDao.find(genreId).get();
@@ -54,7 +55,7 @@ public class FilmDao extends ModelDao<Film> {
     }
 
     public void addGenre(Long id, Long genreId) {
-        jdbcTemplate.execute("insert into films_genres values(" + id + ", " + genreId + ")" );
+        jdbcTemplate.execute("insert into films_genres values(" + id + ", " + genreId + ")");
     }
 
     public void removeGenre(Long id, Long genreId) {
@@ -63,7 +64,7 @@ public class FilmDao extends ModelDao<Film> {
 
     public List<Long> getLikes(long id) {
         var result = new ArrayList<Long>();
-        var rows = jdbcTemplate.queryForRowSet("select * from Likes WHERE film_id = " + id );
+        var rows = jdbcTemplate.queryForRowSet("select * from Likes WHERE film_id = " + id);
         while (rows.next()) {
             var object = rows.getLong("user_id");
             result.add(object);
@@ -72,7 +73,7 @@ public class FilmDao extends ModelDao<Film> {
     }
 
     public void addLike(Long id, Long userId) {
-        jdbcTemplate.execute("insert into Likes values(" + userId + ", " + id + ")" );
+        jdbcTemplate.execute("insert into Likes values(" + userId + ", " + id + ")");
     }
 
     public void removeLike(Long id, Long userId) {
@@ -85,9 +86,9 @@ public class FilmDao extends ModelDao<Film> {
         var description = set.getString("DESCRIPTION");
         var releaseDate = set.getDate("REALEASE_DATE").toLocalDate();
         var duration = set.getInt("DURATION");
-        var rating_id = set.getLong("Rating_id");
+        var ratingId = set.getLong("Rating_id");
         var name = set.getString("NAME");
-        var rating = ratingDao.find(rating_id);
+        var rating = ratingDao.find(ratingId);
         Film film = new Film(name, description, releaseDate, duration);
         film.setId(id);
         film.setMpa(rating.get());
@@ -99,23 +100,50 @@ public class FilmDao extends ModelDao<Film> {
     @Override
     public String getInsertData(Film object) {
         StringBuilder builder = new StringBuilder();
-        builder.append("'").append(object.getId()).append("',").
-                append("'").append(object.getDescription()).append("',").
-                append("'").append(object.getReleaseDate()).append("',").
-                append("'").append(object.getDuration()).append("',").
-                append("'").append(object.getMpa().getId()).append("',").
-                append("'").append(object.getName()).append("'");
+        builder.append("'").
+                append(object.getId()).
+                append("',").
+                append("'").
+                append(object.getDescription()).
+                append("',").
+                append("'").
+                append(object.getReleaseDate()).
+                append("',").
+                append("'").
+                append(object.getDuration()).
+                append("',").
+                append("'").
+                append(object.getMpa().getId()).
+                append("',").
+                append("'").
+                append(object.getName()).
+                append("'");
         return builder.toString();
     }
 
     @Override
     public String getUpdateData(Film object) {
         StringBuilder builder = new StringBuilder();
-        builder.append("description = ").append("'").append(object.getDescription()).append("',").
-                append("realease_Date = ").append("'").append(object.getReleaseDate()).append("',").
-                append("duration = ").append("'").append(object.getDuration()).append("',").
-                append("rating_Id = ").append("'").append(object.getMpa().getId()).append("',").
-                append("name = ").append("'").append(object.getName()).append("'");
+        builder.append("description = ").
+                append("'").
+                append(object.getDescription()).
+                append("',").
+                append("realease_Date = ").
+                append("'").
+                append(object.getReleaseDate()).
+                append("',").
+                append("duration = ").
+                append("'").
+                append(object.getDuration()).
+                append("',").
+                append("rating_Id = ").
+                append("'").
+                append(object.getMpa().getId()).
+                append("',").
+                append("name = ").
+                append("'").
+                append(object.getName()).
+                append("'");
         return builder.toString();
     }
 
