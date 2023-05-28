@@ -11,8 +11,10 @@ import java.util.Set;
 public class Film extends Model {
     private String description;
     private LocalDate releaseDate;
-    private int duration;
+    private Integer duration;
     private Set<Long> likes;
+    private Rating mpa;
+    private Set<Genre> genres;
 
     public Film(String name, String description, LocalDate releaseDate, int duration) {
         this.setName(name);
@@ -20,6 +22,8 @@ public class Film extends Model {
         this.setReleaseDate(releaseDate);
         this.setDuration(duration);
         likes = new HashSet<>();
+        //mpa = new HashSet<>();
+        genres = new HashSet<>();
     }
 
     public void addLike(Long id) {

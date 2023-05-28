@@ -1,7 +1,9 @@
 package ru.yandex.practicum.filmorate.services;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
+import ru.yandex.practicum.filmorate.dao.UserDao;
 import ru.yandex.practicum.filmorate.exceptions.NotFoundException;
 import ru.yandex.practicum.filmorate.models.User;
 import ru.yandex.practicum.filmorate.storages.ModelStorage;
@@ -13,28 +15,22 @@ import java.util.stream.Collectors;
 @Service
 @RequiredArgsConstructor
 public class UserService {
-    private final ModelStorage<User> userStorage;
+
+    private final UserDao userStorage;
 
     public void addFriendship(long userId, long friendId) {
-        var user = get(userId);
-        var friend = get(friendId);
-        user.addFriend(friendId);
-        friend.addFriend(userId);
+        get(userId);
+        get(friendId);
+        userStorage.addFriend(userId, friendId);
     }
 
     public void removeFriendship(long userId, long friendId) {
-        var user = get(userId);
-        var friend = get(friendId);
-        user.addFriend(friendId);
-        friend.addFriend(userId);
-        user.removeFriend(friendId);
-        friend.removeFriend(userId);
+        userStorage.removeFriend(userId, friendId);
     }
 
     public List<User> getFriends(long id) {
-        var user = get(id);
         var friends = new ArrayList<User>();
-        var friendsIds = user.getFriends();
+        var friendsIds = userStorage.getFriends(id);
         for (long friendId : friendsIds) {
             var friend = get(friendId);
             friends.add(friend);
@@ -43,11 +39,9 @@ public class UserService {
     }
 
     public List<User> getSameFriends(long id, long otherId) {
-        var user = get(id);
-        var otherUser = get(otherId);
-        var otherFriends = otherUser.getFriends();
-        return user
-                .getFriends()
+        var otherFriends = userStorage.getFriends(otherId);
+        return userStorage
+                .getFriends(id)
                 .stream()
                 .filter(otherFriends::contains)
                 .map(this::get)

@@ -3,6 +3,7 @@ package ru.yandex.practicum.filmorate.controllers;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+import ru.yandex.practicum.filmorate.dao.FilmDao;
 import ru.yandex.practicum.filmorate.exceptions.ValidationException;
 import ru.yandex.practicum.filmorate.services.FilmService;
 import ru.yandex.practicum.filmorate.models.Film;
@@ -10,6 +11,7 @@ import ru.yandex.practicum.filmorate.services.UserService;
 import ru.yandex.practicum.filmorate.storages.InMemoryFilmStorage;
 
 import java.time.LocalDate;
+import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 
@@ -23,7 +25,7 @@ public class FilmController extends Controller<Film> {
     private final UserService userService;
 
     @Autowired
-    public FilmController(FilmService service, InMemoryFilmStorage storage, UserService userService) {
+    public FilmController(FilmService service, FilmDao storage, UserService userService) {
         super(storage);
         this.service = service;
         this.userService = userService;
@@ -40,7 +42,7 @@ public class FilmController extends Controller<Film> {
     }
 
     @GetMapping("/popular")
-    public Set<Film> getPopular(@RequestParam("count") Optional<Integer> count) {
+    public List<Film> getPopular(@RequestParam("count") Optional<Integer> count) {
         int filmsCount = 10;
         if (count.isPresent()) {
             filmsCount = count.get();
