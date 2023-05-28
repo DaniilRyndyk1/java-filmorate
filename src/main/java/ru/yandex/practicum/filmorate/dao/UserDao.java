@@ -51,21 +51,43 @@ public class UserDao extends ModelDao<User>{
     @Override
     public String getInsertData(User object) {
         StringBuilder builder = new StringBuilder();
-        builder.append("'").append(object.getId()).append("',").
-                append("'").append(object.getEmail()).append("',").
-                append("'").append(object.getLogin()).append("',").
-                append("'").append(object.getBirthday()).append("',").
-                append("'").append(object.getName()).append("'");
+        builder.append("'").
+                append(object.getId()).
+                append("',").
+                append("'").
+                append(object.getEmail()).
+                append("',").
+                append("'").
+                append(object.getLogin()).
+                append("',").
+                append("'").
+                append(object.getBirthday()).
+                append("',").
+                append("'").
+                append(object.getName()).
+                append("'");
         return builder.toString();
     }
 
     @Override
     public String getUpdateData(User object) {
         StringBuilder builder = new StringBuilder();
-        builder.append("email = ").append("'").append(object.getEmail()).append("',").
-                append("login = ").append("'").append(object.getLogin()).append("',").
-                append("birthday = ").append("'").append(object.getBirthday()).append("',").
-                append("name = ").append("'").append(object.getName()).append("'");
+        builder.append("email = ").
+                append("'").
+                append(object.getEmail()).
+                append("',").
+                append("login = ").
+                append("'").
+                append(object.getLogin()).
+                append("',").
+                append("birthday = ").
+                append("'").
+                append(object.getBirthday()).
+                append("',").
+                append("name = ").
+                append("'").
+                append(object.getName()).
+                append("'");
         return builder.toString();
     }
 }

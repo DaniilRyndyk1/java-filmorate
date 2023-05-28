@@ -27,15 +27,22 @@ public class RatingDao extends ModelDao<Rating>{
     @Override
     public String getInsertData(Rating object) {
         StringBuilder builder = new StringBuilder();
-        builder.append("'").append(object.getId()).append("',").
-                append("'").append(object.getName()).append("'");
+        builder.append("'").
+                append(object.getId()).
+                append("',").
+                append("'").
+                append(object.getName()).
+                append("'");
         return builder.toString();
     }
 
     @Override
     public String getUpdateData(Rating object) {
         StringBuilder builder = new StringBuilder();
-        builder.append("name = ").append("'").append(object.getName()).append("'");
+        builder.append("name = ").
+                append("'").
+                append(object.getName()).
+                append("'");
         return builder.toString();
     }
 }

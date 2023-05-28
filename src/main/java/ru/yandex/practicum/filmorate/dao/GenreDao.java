@@ -1,13 +1,10 @@
 package ru.yandex.practicum.filmorate.dao;
-        import org.springframework.beans.factory.annotation.Qualifier;
-        import org.springframework.context.annotation.Primary;
-        import org.springframework.jdbc.core.JdbcTemplate;
-        import org.springframework.jdbc.support.rowset.SqlRowSet;
-        import org.springframework.stereotype.Component;
-        import ru.yandex.practicum.filmorate.models.Genre;
-
-        import java.util.ArrayList;
-        import java.util.List;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.context.annotation.Primary;
+import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.support.rowset.SqlRowSet;
+import org.springframework.stereotype.Component;
+import ru.yandex.practicum.filmorate.models.Genre;
 
 @Component
 @Qualifier("GenreDao")
@@ -30,15 +27,22 @@ public class GenreDao extends ModelDao<Genre>{
     @Override
     public String getInsertData(Genre object) {
         StringBuilder builder = new StringBuilder();
-        builder.append("'").append(object.getId()).append("',").
-                append("'").append(object.getName()).append("'");
+        builder.append("'").
+                append(object.getId()).
+                append("',").
+                append("'").
+                append(object.getName()).
+                append("'");
         return builder.toString();
     }
 
     @Override
     public String getUpdateData(Genre object) {
         StringBuilder builder = new StringBuilder();
-        builder.append("name = ").append("'").append(object.getName()).append("'");
+        builder.append("name = ").
+                append("'").
+                append(object.getName()).
+                append("'");
         return builder.toString();
     }
 }
