@@ -8,12 +8,10 @@ import ru.yandex.practicum.filmorate.exceptions.ValidationException;
 import ru.yandex.practicum.filmorate.services.FilmService;
 import ru.yandex.practicum.filmorate.models.Film;
 import ru.yandex.practicum.filmorate.services.UserService;
-import ru.yandex.practicum.filmorate.storages.InMemoryFilmStorage;
 
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
-import java.util.Set;
 
 @RestController
 @Slf4j
@@ -22,13 +20,11 @@ public class FilmController extends Controller<Film> {
 
     private static final LocalDate MOVIE_BORNING_DATE = LocalDate.parse("1895-12-28");
     private final FilmService service;
-    private final UserService userService;
 
     @Autowired
     public FilmController(FilmService service, FilmDao storage, UserService userService) {
         super(storage);
         this.service = service;
-        this.userService = userService;
     }
 
     @PutMapping("/{id}/like/{userId}")
