@@ -9,7 +9,7 @@ import ru.yandex.practicum.filmorate.models.Rating;
 @Component
 @Qualifier("RatingDao")
 @Primary
-public class RatingDao extends ModelDao<Rating>{
+public class RatingDao extends ModelDao<Rating> {
     public RatingDao(JdbcTemplate jdbcTemplate) {
         super(jdbcTemplate, "Rating");
     }

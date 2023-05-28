@@ -9,11 +9,12 @@ import ru.yandex.practicum.filmorate.models.User;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 @Component
 @Qualifier("UserDao")
 @Primary
-public class UserDao extends ModelDao<User>{
+public class UserDao extends ModelDao<User> {
     public UserDao(JdbcTemplate jdbcTemplate) {
         super(jdbcTemplate, "USERS");
     }
@@ -42,7 +43,7 @@ public class UserDao extends ModelDao<User>{
         var name = set.getString("NAME");
         var email = set.getString("EMAIL");
         var login = set.getString("LOGIN");
-        var date = set.getDate("BIRTHDAY").toLocalDate();
+        var date = Objects.requireNonNull(set.getDate("BIRTHDAY")).toLocalDate();
         User user = new User(name, email, login, date);
         user.setId(id);
         return user;

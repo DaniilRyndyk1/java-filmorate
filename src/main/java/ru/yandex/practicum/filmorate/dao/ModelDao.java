@@ -11,7 +11,7 @@ import java.util.List;
 import java.util.Optional;
 
 @Slf4j
-public class ModelDao <T extends Model> implements ModelStorage<T> {
+public class ModelDao<T extends Model> implements ModelStorage<T> {
     public final JdbcTemplate jdbcTemplate;
     public final String tableName;
     public long id = 1;
@@ -36,7 +36,7 @@ public class ModelDao <T extends Model> implements ModelStorage<T> {
     @Override
     public T add(T object) {
         object.setId(id);
-        jdbcTemplate.execute("insert into PUBLIC." + tableName + " values("+ getInsertData(object)+")");
+        jdbcTemplate.execute("insert into PUBLIC." + tableName + " values("+ getInsertData(object) + ")");
         log.info("Успешно был добавлен объект типа {} с id = {}", object.getClass().getSimpleName(), id);
         id++;
         return object;
@@ -44,8 +44,8 @@ public class ModelDao <T extends Model> implements ModelStorage<T> {
 
     @Override
     public Optional<T> find(long id) {
-        SqlRowSet userRows = jdbcTemplate.queryForRowSet("select * from " + tableName +" where id =" + id);
-        if(userRows.next()) {
+        SqlRowSet userRows = jdbcTemplate.queryForRowSet("select * from " + tableName + " where id =" + id);
+        if (userRows.next()) {
             var result = getObject(userRows);
             return Optional.of(result);
         } else {
