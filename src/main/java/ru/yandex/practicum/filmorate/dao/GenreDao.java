@@ -9,7 +9,7 @@ import ru.yandex.practicum.filmorate.models.Genre;
 @Component
 @Qualifier("GenreDao")
 @Primary
-public class GenreDao extends ModelDao<Genre>{
+public class GenreDao extends ModelDao<Genre> {
     public GenreDao(JdbcTemplate jdbcTemplate) {
         super(jdbcTemplate, "GENRE");
     }
