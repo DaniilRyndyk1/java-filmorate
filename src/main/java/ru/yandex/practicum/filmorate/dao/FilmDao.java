@@ -9,7 +9,6 @@ import ru.yandex.practicum.filmorate.models.Film;
 import ru.yandex.practicum.filmorate.models.Genre;
 
 import java.util.*;
-import java.util.stream.Collectors;
 
 
 @Component
