@@ -31,7 +31,7 @@ public class FilmController extends Controller<Film> {
     }
 
     @GetMapping("/popular")
-    public List<Film> getPopular(@RequestParam(name = "count", defaultValue="10") int count) {
+    public List<Film> getPopular(@RequestParam(name = "count", defaultValue = "10") int count) {
         return service.getMostPopular(count);
     }
 }
