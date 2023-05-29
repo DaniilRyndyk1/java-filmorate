@@ -16,7 +16,7 @@ import java.time.LocalDate;
 
 @AutoConfigureTestDatabase
 @RequiredArgsConstructor(onConstructor_ = @Autowired)
-class FilmoRateApplicationTests {
+class FilmorateApplicationTests {
 	private final UserDao userDao;
 	private final FilmDao filmDao;
 
