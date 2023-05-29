@@ -18,9 +18,7 @@ public class RatingDao extends ModelDao<Rating> {
     public Rating getObject(SqlRowSet set) {
         var id = set.getLong("ID");
         var name = set.getString("NAME");
-        Rating rating = new Rating();
-        rating.setId(id);
-        rating.setName(name);
+        Rating rating = new Rating(id, name);
         return rating;
     }
 

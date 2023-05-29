@@ -4,16 +4,18 @@ import lombok.RequiredArgsConstructor;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
+import org.springframework.boot.test.context.SpringBootTest;
 import ru.yandex.practicum.filmorate.dao.FilmDao;
 import ru.yandex.practicum.filmorate.dao.UserDao;
 import ru.yandex.practicum.filmorate.models.Film;
+import ru.yandex.practicum.filmorate.models.Rating;
 import ru.yandex.practicum.filmorate.models.User;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.time.LocalDate;
 
-
+@SpringBootTest
 @AutoConfigureTestDatabase
 @RequiredArgsConstructor(onConstructor_ = @Autowired)
 class FilmorateApplicationTests {
@@ -23,6 +25,7 @@ class FilmorateApplicationTests {
 	@Test
 	public void shouldFindFilm() {
 		var film = new Film("DanilaFilm2", "SuperDanila2", LocalDate.parse("2000-08-31"), 229);
+		film.setMpa(new Rating(1L, "AAAA"));
 		filmDao.add(film);
 		var film2 = filmDao.find(1);
 		assertTrue(film2.isPresent());
@@ -65,6 +68,7 @@ class FilmorateApplicationTests {
 	@Test
 	public void shouldCreateFilm() {
 		var film = new Film("DanilaFilm", "SuperDanila", LocalDate.parse("2000-07-31"), 228);
+		film.setMpa(new Rating(1L, "AAAA"));
 		film = filmDao.add(film);
 		var films = filmDao.getAll();
 
@@ -85,6 +89,7 @@ class FilmorateApplicationTests {
 	@Test
 	public void shouldChangeFilm() {
 		var film = new Film("DanilaFilm", "SuperDanila", LocalDate.parse("2000-07-31"), 228);
+		film.setMpa(new Rating(1L, "AAAA"));
 		film = filmDao.add(film);
 		film.setName("king-kong");
 		filmDao.change(film);
