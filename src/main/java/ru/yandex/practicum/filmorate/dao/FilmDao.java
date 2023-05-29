@@ -9,6 +9,7 @@ import ru.yandex.practicum.filmorate.models.Film;
 import ru.yandex.practicum.filmorate.models.Genre;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 
 @Component
@@ -152,9 +153,19 @@ public class FilmDao extends ModelDao<Film> {
     @Override
     public Film change(Film object) {
         jdbcTemplate.execute("delete from films_genres where film_id = " + object.getId());
+        var gaenres = object.getGenres();
+        var ids = new ArrayList<Long>();
+        for (Genre genre : gaenres) {
+            ids.add(genre.getId());
+        }
+
+        Collections.sort(ids);
+
+        object.setGenres(new HashSet<>());
         object = super.change(object);
-        for (Genre genre : object.getGenres()) {
-            addGenre(object.getId(), genre.getId());
+        for (Long id : ids) {
+            addGenre(object.getId(), id);
+            object.getGenres().add(genreDao.find(id).get());
         }
         return object;
     }
