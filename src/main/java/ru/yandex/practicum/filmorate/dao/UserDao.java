@@ -21,7 +21,7 @@ public class UserDao extends ModelDao<User> {
 
     public List<Long> getFriends(long id) {
         var result = new ArrayList<Long>();
-        var rows = jdbcTemplate.queryForRowSet("select * from FRIENDS WHERE user_id = " + id );
+        var rows = jdbcTemplate.queryForRowSet("select * from FRIENDS WHERE user_id = " + id);
         while (rows.next()) {
             var object = rows.getLong("friend_id");
             result.add(object);
@@ -30,7 +30,7 @@ public class UserDao extends ModelDao<User> {
     }
 
     public void addFriend(Long id, Long friendId) {
-        jdbcTemplate.execute("insert into friends values(" + id + ", " + friendId + ",'')" );
+        jdbcTemplate.execute("insert into friends values(" + id + ", " + friendId + ",'')");
     }
 
     public void removeFriend(Long id, Long friendId) {
