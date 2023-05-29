@@ -1,6 +1,7 @@
 package ru.yandex.practicum.filmorate.storages;
 
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.jdbc.support.rowset.SqlRowSet;
 import org.springframework.stereotype.Component;
 import ru.yandex.practicum.filmorate.models.Model;
 
@@ -56,5 +57,20 @@ public class InMemoryModelStorage<T extends Model> implements ModelStorage<T> {
         objects.put(id, model);
         log.info("Успешно был обновлен объект типа {} с id = {}", model.getClass().getSimpleName(), id);
         return model;
+    }
+
+    @Override
+    public String getUpdateData(T object) {
+        return null;
+    }
+
+    @Override
+    public String getInsertData(T object) {
+        return null;
+    }
+
+    @Override
+    public T getObject(SqlRowSet set) {
+        return null;
     }
 }

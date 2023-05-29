@@ -1,22 +1,79 @@
 package ru.yandex.practicum.filmorate.dao;
 
-import org.springframework.beans.factory.annotation.Qualifier;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Primary;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.support.rowset.SqlRowSet;
 import org.springframework.stereotype.Component;
 import ru.yandex.practicum.filmorate.models.User;
+import ru.yandex.practicum.filmorate.storages.ModelStorage;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
 
 @Component
-@Qualifier("UserDao")
 @Primary
-public class UserDao extends ModelDao<User> {
-    public UserDao(JdbcTemplate jdbcTemplate) {
-        super(jdbcTemplate, "USERS");
+@Slf4j
+public class UserDbStorage implements ModelStorage<User> {
+
+    public final JdbcTemplate jdbcTemplate;
+    public long id = 1;
+
+    @Autowired
+    public UserDbStorage(JdbcTemplate jdbcTemplate) {
+        this.jdbcTemplate = jdbcTemplate;
+    }
+
+    @Override
+    public User add(User object) {
+        object.setId(id);
+        jdbcTemplate.execute("insert into PUBLIC.Users values(" + getInsertData(object) + ")");
+        log.info("Успешно был добавлен объект типа {} с id = {}", object.getClass().getSimpleName(), id);
+        id++;
+        return object;
+    }
+
+    @Override
+    public User change(User object) {
+        jdbcTemplate.execute("update Users set " + getUpdateData(object) + " where id = " + object.getId());
+        return object;
+    }
+
+    @Override
+    public Optional<User> find(long id) {
+        SqlRowSet userRows = jdbcTemplate.queryForRowSet("select * from Users where id =" + id);
+        if (userRows.next()) {
+            var result = getObject(userRows);
+            return Optional.of(result);
+        } else {
+            log.info("Объект с идентификатором {} не найден.", id);
+            return Optional.empty();
+        }
+    }
+
+    @Override
+    public boolean remove(long id) {
+        jdbcTemplate.execute("delete from Users where id = " + id);
+        return true;
+    }
+
+    @Override
+    public void clear() {
+        jdbcTemplate.execute("delete from Users");
+    }
+
+    @Override
+    public List<User> getAll() {
+        var result = new ArrayList<User>();
+        var rows = jdbcTemplate.queryForRowSet("select * from Users");
+        while (rows.next()) {
+            var object = getObject(rows);
+            result.add(object);
+        }
+        return result;
     }
 
     public List<Long> getFriends(long id) {

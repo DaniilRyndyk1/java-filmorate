@@ -4,9 +4,8 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
-import ru.yandex.practicum.filmorate.exceptions.NotFoundException;
 import ru.yandex.practicum.filmorate.exceptions.ValidationException;
-import ru.yandex.practicum.filmorate.storages.ModelStorage;
+import ru.yandex.practicum.filmorate.services.ModelService;
 import ru.yandex.practicum.filmorate.models.Model;
 import java.util.Map;
 import java.util.List;
@@ -15,38 +14,31 @@ import java.util.List;
 @RequiredArgsConstructor
 public abstract class Controller<T extends Model> {
 
-    private final ModelStorage<T> manager;
+    private final ModelService<T> service;
 
     @GetMapping("{id}")
     public T get(@PathVariable long id) {
-        var object = manager.find(id);
-        if (object.isEmpty()) {
-            throw new NotFoundException(id, object.getClass().getSimpleName());
-        }
-        return object.get();
+        return service.get(id);
     }
 
     @GetMapping
     public List<T> getAll() {
-        return manager.getAll();
+        return service.getAll();
     }
 
     @DeleteMapping
     public void clear() {
-         manager.clear();
+         service.clear();
     }
 
     @PostMapping
     public T create(@RequestBody T object) {
-        validate(object);
-        return manager.add(object);
+        return service.create(object);
     }
 
     @PutMapping
     public T change(@RequestBody T object) {
-        validate(object);
-        get(object.getId());
-        return manager.change(object);
+        return service.change(object);
     }
 
     @ExceptionHandler
@@ -58,5 +50,7 @@ public abstract class Controller<T extends Model> {
         return Map.of("error", e.getMessage());
     }
 
-    public abstract void validate(T object);
+    public void validate(T object) {
+        service.validate(object);
+    }
 }
