@@ -9,6 +9,7 @@ import ru.yandex.practicum.filmorate.models.Film;
 import ru.yandex.practicum.filmorate.models.Genre;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 
 @Component
@@ -42,7 +43,7 @@ public class FilmDao extends ModelDao<Film> {
 
     public Set<Genre> getGenres(long id) {
         var result = new HashSet<Genre>();
-        var rows = jdbcTemplate.queryForRowSet("select * from FILMS_GENRES WHERE film_id = " + id);
+        var rows = jdbcTemplate.queryForRowSet("select * from FILMS_GENRES WHERE film_id = " + id + " order by genre_id");
         while (rows.next()) {
             var genreId = rows.getLong("genre_id");
             var object = genreDao.find(genreId).get();
