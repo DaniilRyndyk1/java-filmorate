@@ -18,8 +18,8 @@ public class GenreService extends ModelService<Genre> {
         this.genreDbStorage = manager;
     }
 
-    public Set<Genre> getGenresByFiln(Long film_id) {
-        return genreDbStorage.getGenresByFilm(film_id);
+    public Set<Genre> getGenresByFiln(Long filmId) {
+        return genreDbStorage.getGenresByFilm(filmId);
     }
 
     public void addGenreToFiln(Long id, Long filmId) {
