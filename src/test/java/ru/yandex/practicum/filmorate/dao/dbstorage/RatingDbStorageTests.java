@@ -18,26 +18,28 @@ public class RatingDbStorageTests {
 
     @Test
     public void shouldRemove() {
+        var ratingsSize = storage.getAll().size();
         storage.remove(1);
-        var users = storage.getAll();
-        assertEquals(users.size(), 6);
+        var ratingsSizeNew = storage.getAll().size();
+
+        assertEquals(ratingsSizeNew - ratingsSize, 1);
     }
 
     @Test
     public void shouldFind() {
         var id = storage.add(new Rating(null, "Test3")).getId();
-        var rating2 = storage.find(id);
-        assertTrue(rating2.isPresent());
-        assertEquals(rating2.get().getName(), "Test3");
+        var rating = storage.find(id);
+        assertTrue(rating.isPresent());
+        assertEquals(rating.get().getName(), "Test3");
     }
 
     @Test
     public void shouldCreate() {
-        var rating = new Rating(null, "Test");
-        storage.add(rating);
-        var ratings = storage.getAll();
+        var ratingsSize = storage.getAll().size();
+        storage.add(new Rating(null, "Test"));
+        var ratingsSizeNew = storage.getAll().size();
 
-        assertEquals(ratings.size(), 7);
+        assertEquals(ratingsSizeNew - ratingsSize, 1);
     }
 
     @Test
@@ -46,9 +48,9 @@ public class RatingDbStorageTests {
         rating = storage.add(rating);
         rating.setName("Test2");
         storage.change(rating);
-        var newRating = storage.find(6);
+        var newRating = storage.find(rating.getId());
         assertTrue(newRating.isPresent());
-        assertEquals(newRating.get().getName(), "test");
+        assertEquals(newRating.get().getName(), "Test3");
     }
 
     @Test
