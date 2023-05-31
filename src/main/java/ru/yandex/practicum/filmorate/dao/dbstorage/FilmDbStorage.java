@@ -1,4 +1,4 @@
-package ru.yandex.practicum.filmorate.dao;
+package ru.yandex.practicum.filmorate.dao.dbstorage;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -6,11 +6,9 @@ import org.springframework.context.annotation.Primary;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.support.rowset.SqlRowSet;
 import org.springframework.stereotype.Component;
+import ru.yandex.practicum.filmorate.dao.ModelStorage;
 import ru.yandex.practicum.filmorate.models.Film;
-import ru.yandex.practicum.filmorate.models.Genre;
-import ru.yandex.practicum.filmorate.services.GenreService;
-import ru.yandex.practicum.filmorate.services.RatingService;
-import ru.yandex.practicum.filmorate.storages.ModelStorage;
+import ru.yandex.practicum.filmorate.models.Rating;
 
 import java.util.*;
 
@@ -19,22 +17,16 @@ import java.util.*;
 @Primary
 @Slf4j
 public class FilmDbStorage implements ModelStorage<Film> {
-    private final RatingService ratingService;
-    private final GenreService genreService;
     public final JdbcTemplate jdbcTemplate;
-    public final String tableName = "FILM";
-    public long id = 1;
 
     @Autowired
-    public FilmDbStorage(JdbcTemplate template, RatingService ratingService, GenreService genreService) {
-        this.ratingService = ratingService;
-        this.genreService = genreService;
+    public FilmDbStorage(JdbcTemplate template) {
         this.jdbcTemplate = template;
     }
 
     @Override
     public Optional<Film> find(long id) {
-        SqlRowSet userRows = jdbcTemplate.queryForRowSet("select * from " + tableName + " where id =" + id);
+        SqlRowSet userRows = jdbcTemplate.queryForRowSet("select * from public.FILM where id =" + id);
         if (userRows.next()) {
             var result = getObject(userRows);
             return Optional.of(result);
@@ -46,19 +38,19 @@ public class FilmDbStorage implements ModelStorage<Film> {
 
     @Override
     public boolean remove(long id) {
-        jdbcTemplate.execute("delete from " + tableName + " where id = " + id);
+        jdbcTemplate.execute("delete from public.FILM where id = " + id);
         return true;
     }
 
     @Override
     public void clear() {
-        jdbcTemplate.execute("delete from " + tableName);
+        jdbcTemplate.execute("delete from public.FILM");
     }
 
     @Override
     public List<Film> getAll() {
         var result = new ArrayList<Film>();
-        var rows = jdbcTemplate.queryForRowSet("select * from " + tableName);
+        var rows = jdbcTemplate.queryForRowSet("select * from public.FILM");
         while (rows.next()) {
             var object = getObject(rows);
             result.add(object);
@@ -82,16 +74,6 @@ public class FilmDbStorage implements ModelStorage<Film> {
         return result;
     }
 
-    public List<Long> getLikes(long id) {
-        var result = new ArrayList<Long>();
-        var rows = jdbcTemplate.queryForRowSet("select * from Likes WHERE film_id = " + id);
-        while (rows.next()) {
-            var object = rows.getLong("user_id");
-            result.add(object);
-        }
-        return result;
-    }
-
     public void addLike(Long id, Long userId) {
         jdbcTemplate.execute("insert into Likes values(" + userId + ", " + id + ")");
     }
@@ -108,19 +90,17 @@ public class FilmDbStorage implements ModelStorage<Film> {
         var duration = set.getInt("DURATION");
         var ratingId = set.getLong("Rating_id");
         var name = set.getString("NAME");
-        var rating = ratingService.get(ratingId);
         Film film = new Film(name, description, releaseDate, duration);
         film.setId(id);
-        film.setMpa(rating);
-        var genres = genreService.getGenresByFiln(id);
-        film.setGenres(genres);
+        film.setMpa(new Rating(ratingId, ""));
         return film;
     }
 
     @Override
     public String getInsertData(Film object) {
-        return "'" +
-                object.getId() +
+        return
+                "'" +
+                object.getName() +
                 "'," +
                 "'" +
                 object.getDescription() +
@@ -133,9 +113,6 @@ public class FilmDbStorage implements ModelStorage<Film> {
                 "'," +
                 "'" +
                 object.getMpa().getId() +
-                "'," +
-                "'" +
-                object.getName() +
                 "'";
     }
 
@@ -165,33 +142,19 @@ public class FilmDbStorage implements ModelStorage<Film> {
 
     @Override
     public Film add(Film object) {
+        jdbcTemplate.execute("insert into PUBLIC.FILM (name, DESCRIPTION, REALEASE_DATE, DURATION, RATING_ID) values(" + getInsertData(object) + ")");
+        var rows = jdbcTemplate.queryForRowSet("select id from public.Film order by id desc limit 1");
+        rows.next();
+        var id = rows.getLong("id");
         object.setId(id);
-        jdbcTemplate.execute("insert into PUBLIC." + tableName + " values(" + getInsertData(object) + ")");
-        log.info("Успешно был добавлен объект типа {} с id = {}", object.getClass().getSimpleName(), id);
-        id++;
-        for (Genre genre : object.getGenres()) {
-            genreService.addGenreToFiln(object.getId(), genre.getId());
-        }
+        log.info("Успешно был добавлен объект типа {}", object.getClass().getSimpleName());
         return object;
     }
 
     @Override
     public Film change(Film object) {
         jdbcTemplate.execute("delete from films_genres where film_id = " + object.getId());
-        var genres = object.getGenres();
-        var ids = new ArrayList<Long>();
-        for (Genre genre : genres) {
-            ids.add(genre.getId());
-        }
-
-        Collections.sort(ids);
-
-        object.setGenres(new HashSet<>());
-        jdbcTemplate.execute("update " + tableName + " set " + getUpdateData(object) + " where id = " + object.getId());
-        for (Long id : ids) {
-            genreService.addGenreToFiln(object.getId(), id);
-            object.getGenres().add(genreService.get(id));
-        }
+        jdbcTemplate.execute("update public.FILM set " + getUpdateData(object) + " where id = " + object.getId());
         return object;
     }
 }

@@ -1,4 +1,4 @@
-package ru.yandex.practicum.filmorate.dao;
+package ru.yandex.practicum.filmorate.dao.dbstorage;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -6,8 +6,8 @@ import org.springframework.context.annotation.Primary;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.support.rowset.SqlRowSet;
 import org.springframework.stereotype.Component;
+import ru.yandex.practicum.filmorate.dao.ModelStorage;
 import ru.yandex.practicum.filmorate.models.User;
-import ru.yandex.practicum.filmorate.storages.ModelStorage;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -20,7 +20,6 @@ import java.util.Optional;
 public class UserDbStorage implements ModelStorage<User> {
 
     public final JdbcTemplate jdbcTemplate;
-    public long id = 1;
 
     @Autowired
     public UserDbStorage(JdbcTemplate jdbcTemplate) {
@@ -29,10 +28,12 @@ public class UserDbStorage implements ModelStorage<User> {
 
     @Override
     public User add(User object) {
+        jdbcTemplate.execute("insert into PUBLIC.Users (name, email, login, birthday) values(" + getInsertData(object) + ")");
+        var rows = jdbcTemplate.queryForRowSet("select id from public.USERS order by id desc limit 1");
+        rows.next();
+        var id = rows.getLong("id");
         object.setId(id);
-        jdbcTemplate.execute("insert into PUBLIC.Users values(" + getInsertData(object) + ")");
-        log.info("Успешно был добавлен объект типа {} с id = {}", object.getClass().getSimpleName(), id);
-        id++;
+        log.info("Успешно был добавлен объект типа {}", object.getClass().getSimpleName());
         return object;
     }
 
@@ -108,8 +109,9 @@ public class UserDbStorage implements ModelStorage<User> {
 
     @Override
     public String getInsertData(User object) {
-        return "'" +
-                object.getId() +
+        return
+                "'" +
+                object.getName() +
                 "'," +
                 "'" +
                 object.getEmail() +
@@ -119,9 +121,6 @@ public class UserDbStorage implements ModelStorage<User> {
                 "'," +
                 "'" +
                 object.getBirthday() +
-                "'," +
-                "'" +
-                object.getName() +
                 "'";
     }
 

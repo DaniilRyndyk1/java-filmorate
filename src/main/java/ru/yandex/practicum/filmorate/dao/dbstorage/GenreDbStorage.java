@@ -1,12 +1,12 @@
-package ru.yandex.practicum.filmorate.dao;
+package ru.yandex.practicum.filmorate.dao.dbstorage;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Primary;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.support.rowset.SqlRowSet;
 import org.springframework.stereotype.Component;
+import ru.yandex.practicum.filmorate.dao.ModelStorage;
 import ru.yandex.practicum.filmorate.models.Genre;
-import ru.yandex.practicum.filmorate.storages.ModelStorage;
 
 import java.util.*;
 
@@ -16,7 +16,6 @@ import java.util.*;
 public class GenreDbStorage implements ModelStorage<Genre> {
 
     public final JdbcTemplate jdbcTemplate;
-    public long id = 1;
 
     @Autowired
     public GenreDbStorage(JdbcTemplate jdbcTemplate) {
@@ -25,10 +24,12 @@ public class GenreDbStorage implements ModelStorage<Genre> {
 
     @Override
     public Genre add(Genre object) {
+        jdbcTemplate.execute("insert into PUBLIC.GENRE (name) values(" + getInsertData(object) + ")");
+        var rows = jdbcTemplate.queryForRowSet("select id from Genre order by id desc limit 1");
+        rows.next();
+        var id = rows.getLong("id");
         object.setId(id);
-        jdbcTemplate.execute("insert into PUBLIC.GENRE values(" + getInsertData(object) + ")");
-        log.info("Успешно был добавлен объект типа {} с id = {}", object.getClass().getSimpleName(), id);
-        id++;
+        log.info("Успешно был добавлен объект типа {}", object.getClass().getSimpleName());
         return object;
     }
 
@@ -95,18 +96,12 @@ public class GenreDbStorage implements ModelStorage<Genre> {
     public Genre getObject(SqlRowSet set) {
         var id = set.getLong("ID");
         var name = set.getString("NAME");
-        Genre genre = new Genre();
-        genre.setId(id);
-        genre.setName(name);
-        return genre;
+        return new Genre(id, name);
     }
 
     @Override
     public String getInsertData(Genre object) {
-        return "'" +
-                object.getId() +
-                "'," +
-                "'" +
+        return  "'" +
                 object.getName() +
                 "'";
     }

@@ -8,7 +8,7 @@ import ru.yandex.practicum.filmorate.services.RatingService;
 @RequestMapping("/mpa")
 @RestController
 public class RatingController extends Controller<Rating> {
-    public RatingController(RatingService manager) {
-        super(manager);
+    public RatingController(RatingService service) {
+        super(service);
     }
 }
