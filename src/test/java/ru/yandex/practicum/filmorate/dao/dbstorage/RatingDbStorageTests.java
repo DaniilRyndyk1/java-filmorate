@@ -48,7 +48,7 @@ public class RatingDbStorageTests {
         storage.change(rating);
         var newRating = storage.find(6);
         assertTrue(newRating.isPresent());
-        assertEquals(newRating.get().getName(), "Test2");
+        assertEquals(newRating.get().getName(), "test");
     }
 
     @Test
