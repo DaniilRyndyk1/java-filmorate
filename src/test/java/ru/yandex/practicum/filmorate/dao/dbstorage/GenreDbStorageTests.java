@@ -18,8 +18,11 @@ public class GenreDbStorageTests {
 
     @Test
     public void shouldRemove() {
+        var size = storage.getAll().size();
         storage.remove(1);
-        assertEquals(storage.getAll().size(), 7);
+        var newSize = storage.getAll().size();
+
+        assertEquals(size - newSize, 1);
     }
 
     @Test
@@ -32,10 +35,11 @@ public class GenreDbStorageTests {
 
     @Test
     public void shouldCreate() {
-        var genre = new Genre(null, "Test");
-        storage.add(genre);
+        var ratingsSize = storage.getAll().size();
+        storage.add(new Genre(null, "Test"));
+        var ratingsSizeNew = storage.getAll().size();
 
-        assertEquals(storage.getAll().size(), 8);
+        assertEquals(ratingsSizeNew - ratingsSize, 1);
     }
 
     @Test

@@ -22,7 +22,7 @@ public class RatingDbStorageTests {
         storage.remove(1);
         var ratingsSizeNew = storage.getAll().size();
 
-        assertEquals(ratingsSizeNew - ratingsSize, 1);
+        assertEquals(ratingsSize - ratingsSizeNew, 1);
     }
 
     @Test
@@ -50,7 +50,7 @@ public class RatingDbStorageTests {
         storage.change(rating);
         var newRating = storage.find(rating.getId());
         assertTrue(newRating.isPresent());
-        assertEquals(newRating.get().getName(), "Test3");
+        assertEquals(newRating.get().getName(), "Test2");
     }
 
     @Test
