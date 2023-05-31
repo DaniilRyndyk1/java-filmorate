@@ -1,5 +1,6 @@
-package ru.yandex.practicum.filmorate.storages;
+package ru.yandex.practicum.filmorate.dao;
 
+import org.springframework.jdbc.support.rowset.SqlRowSet;
 import ru.yandex.practicum.filmorate.models.Model;
 
 import java.util.List;
@@ -17,4 +18,10 @@ public interface ModelStorage<T extends Model> {
     List<T> getAll();
 
     T change(T model);
+
+    String getUpdateData(T object);
+
+    String getInsertData(T object);
+
+    T getObject(SqlRowSet set);
 }

@@ -1,4 +1,4 @@
-package ru.yandex.practicum.filmorate.storages;
+package ru.yandex.practicum.filmorate.dao.inmemorystorage;
 
 import org.springframework.stereotype.Component;
 import ru.yandex.practicum.filmorate.models.Film;
